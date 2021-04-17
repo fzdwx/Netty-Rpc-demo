@@ -1,4 +1,4 @@
-package cn.like.netty.rpc.server.util;
+package cn.like.netty.common.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

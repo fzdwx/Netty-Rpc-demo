@@ -2,7 +2,7 @@ package cn.like.netty.rpc.server.channel;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.like.netty.common.channel.NettyChannelManager;
-import cn.like.netty.rpc.server.util.RedisUtil;
+import cn.like.netty.common.util.RedisUtil;
 import io.netty.channel.Channel;
 import org.aopalliance.intercept.Invocation;
 import org.slf4j.Logger;
