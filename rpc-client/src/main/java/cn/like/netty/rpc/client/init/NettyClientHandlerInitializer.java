@@ -35,7 +35,6 @@ public class NettyClientHandlerInitializer extends ChannelInitializer<Channel> {
     NettyClientHandler nettyClientHandler;
     @Autowired
     MessageDispatcher messageDispatcher;
-
     @Override
     protected void initChannel(Channel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline()
