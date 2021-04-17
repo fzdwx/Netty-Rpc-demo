@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @Description: Message  sequenceId 生成器
  */
-public abstract class SqeIdGetter {
+public abstract class SeqIdGetter {
     public static final AtomicInteger id = new AtomicInteger();
 
     public static final int getId() {

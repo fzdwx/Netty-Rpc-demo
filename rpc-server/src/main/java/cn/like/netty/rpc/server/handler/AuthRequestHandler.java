@@ -30,7 +30,7 @@ public class AuthRequestHandler implements MessageHandler<AuthRequest> {
         // 绑定用户
         ncm.bindUser(channel, message.getAccessToken());
         // 返回成功
-        channel.writeAndFlush(AuthResponse.success());
+        channel.writeAndFlush(AuthResponse.success(message.getAccessToken() + "认证成功"));
     }
 
     @Override

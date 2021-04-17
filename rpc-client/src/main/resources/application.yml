@@ -1,3 +1,6 @@
 netty:
   server-port: 6666
   server-host: localhost
+
+message-codec-sharable:
+  magic-number: LIKELOVE

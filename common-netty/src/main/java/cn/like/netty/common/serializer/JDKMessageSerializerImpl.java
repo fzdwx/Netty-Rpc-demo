@@ -7,6 +7,7 @@ import java.io.*;
  * <p>
  * jdk 序列化
  */
+// @Component
 public class JDKMessageSerializerImpl implements MessageSerializer {
     @Override
     public <T> byte[] serialization(T object) {

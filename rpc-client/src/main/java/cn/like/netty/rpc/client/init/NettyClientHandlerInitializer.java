@@ -27,22 +27,21 @@ public class NettyClientHandlerInitializer extends ChannelInitializer<Channel> {
      */
     private static final Integer READ_TIMEOUT_SECONDS = 60;
 
-    /** 安全的 like 消息编解码器 */
     @Autowired
     MessageCodecSharable messageCodecSharable;
-    /** netty 服务端处理程序 */
     @Autowired
     NettyClientHandler nettyClientHandler;
     @Autowired
     MessageDispatcher messageDispatcher;
+
     @Override
     protected void initChannel(Channel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline()
                 .addLast(new IdleStateHandler(READ_TIMEOUT_SECONDS, 0, 0))
                 .addLast(new ReadTimeoutHandler(3 * READ_TIMEOUT_SECONDS))
                 .addLast(new LoggingHandler(LogLevel.DEBUG))
-                .addLast(messageCodecSharable)
                 .addLast(new LengthFieldBasedFrameDecoder(1024, 18, 4, 0, 0))
+                .addLast(messageCodecSharable)
                 .addLast(nettyClientHandler)
                 .addLast(messageDispatcher);
 

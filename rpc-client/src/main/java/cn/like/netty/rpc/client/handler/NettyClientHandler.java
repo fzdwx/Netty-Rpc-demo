@@ -46,7 +46,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
         // 空闲时，向服务端发起一次心跳
         if (event instanceof IdleStateEvent) {
             log.info("[userEventTriggered][发起一次心跳]");
-            HeartbeatRequest heartbeatRequest = new HeartbeatRequest();
+            HeartbeatRequest heartbeatRequest = new HeartbeatRequest("ping");
             ctx.writeAndFlush(heartbeatRequest)
                     .addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
         } else {

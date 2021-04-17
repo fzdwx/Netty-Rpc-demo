@@ -1,10 +1,10 @@
 package cn.like.netty.common.message.auth;
 
-import cn.like.netty.common.message.Message;
-import lombok.AllArgsConstructor;
+import cn.like.netty.common.message.AbstractResponseMessage;
+import cn.like.netty.common.util.SeqIdGetter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Create By like On 2021-04-17 15:53
@@ -13,13 +13,18 @@ import lombok.NoArgsConstructor;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class AuthResponse extends Message {
+@ToString(callSuper = true)
+public class AuthResponse extends AbstractResponseMessage {
     /** 响应码 */
     private Integer code;
     /** 响应消息 */
     private String message;
+
+    public AuthResponse(int code, String message) {
+        this.code = code;
+        this.message = message;
+        setSequenceId(SeqIdGetter.getId());
+    }
 
     public static AuthResponse error(String message) {
         return error(AuthCode.error.code, message);

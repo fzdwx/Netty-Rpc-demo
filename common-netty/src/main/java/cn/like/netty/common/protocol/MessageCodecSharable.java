@@ -1,7 +1,6 @@
 package cn.like.netty.common.protocol;
 
 import cn.like.netty.common.message.Message;
-import cn.like.netty.common.message.dispatcher.MessageContainer;
 import cn.like.netty.common.serializer.MessageSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.buffer.ByteBuf;
@@ -88,7 +87,7 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, Message
         byte[] msg = new byte[msgLen];
         in.readBytes(msg, 0, msgLen);
 
-        out.add(messageSerializer.deserialization(MessageContainer.getMessageClass(messageType), msg));  // 反序列化
+        out.add(messageSerializer.deserialization(Message.getMessageClass(messageType), msg));  // 反序列化
     }
 
     public String getMagicNumber() {

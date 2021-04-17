@@ -1,6 +1,5 @@
 package cn.like.netty.common.message.dispatcher;
 
-import cn.like.netty.common.message.Message;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +14,11 @@ import static org.slf4j.LoggerFactory.getLogger;
  * Create By like On 2021-04-17 15:07
  * <p>
  * message 容器
+ *
+ * @see cn.like.netty.common.message.Message
  */
 public class MessageContainer implements InitializingBean {
 
-    /** 消息类 */
-    private static final Map<Integer, Class<?>> messageClasses = new HashMap<>();
     private final static Logger log = getLogger(MessageContainer.class);
     /**
      * 消息类型与 MessageHandler 的映射
@@ -28,9 +27,6 @@ public class MessageContainer implements InitializingBean {
     @Autowired
     private ApplicationContext applicationContext;
 
-    public static Class<?> getMessageClass(int messageType) {
-        return messageClasses.get(messageType);
-    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -38,8 +34,6 @@ public class MessageContainer implements InitializingBean {
         applicationContext.getBeansOfType(MessageHandler.class).values() // 获得所有 MessageHandler Bean
                 .forEach(messageHandler -> handlers.put(messageHandler.getMessageType(), messageHandler)); // 添加到 handlers 中
 
-        applicationContext.getBeansOfType(Message.class).values()
-                .forEach(message -> messageClasses.put(message.getMessageType(), message.getClass()));
         log.info("[afterPropertiesSet][消息处理器数量：{}]", handlers.size());
     }
 

@@ -23,7 +23,7 @@ public class HeartbeatRequestHandler implements MessageHandler<HeartbeatRequest>
     public void execute(Channel channel, HeartbeatRequest message) {
         log.info("[execute][收到连接({}) 的心跳请求]", channel.id());
         // 响应心跳
-        HeartbeatResponse response = new HeartbeatResponse();
+        HeartbeatResponse response = new HeartbeatResponse("pong");
         channel.writeAndFlush(response);
     }
 

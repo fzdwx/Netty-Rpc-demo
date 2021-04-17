@@ -28,10 +28,8 @@ public class NettyServerHandlerInitializer extends ChannelInitializer<Channel> {
      */
     private static final Integer READ_TIMEOUT_SECONDS = 3 * 60;
 
-    /** 安全的 like 消息编解码器 */
     @Autowired
     MessageCodecSharable messageCodecSharable;
-    /** netty 服务端处理程序 */
     @Autowired
     NettyServerHandler nettyServerHandler;
     @Autowired
@@ -43,8 +41,8 @@ public class NettyServerHandlerInitializer extends ChannelInitializer<Channel> {
                 // 空闲检测
                 .addLast(new ReadTimeoutHandler(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS))
                 .addLast(new LoggingHandler(LogLevel.DEBUG))
-                .addLast(messageCodecSharable)
                 .addLast(new LengthFieldBasedFrameDecoder(1024, 18, 4, 0, 0))
+                .addLast(messageCodecSharable)
                 .addLast(nettyServerHandler)
                 .addLast(messageDispatcher);
     }

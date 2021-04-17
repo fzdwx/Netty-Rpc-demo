@@ -107,6 +107,7 @@ public class NettyClient {
      * 发送消息
      *
      * @param message 消息体
+     * @return
      */
     public void send(Message message) {
         if (channel == null) {
@@ -118,6 +119,7 @@ public class NettyClient {
             return;
         }
         // 发送消息
+        System.out.println(message);
         channel.writeAndFlush(message);
     }
 }

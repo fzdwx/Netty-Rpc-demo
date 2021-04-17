@@ -1,8 +1,10 @@
 package cn.like.netty.common.message.rpc;
 
 import cn.like.netty.common.message.AbstractResponseMessage;
+import cn.like.netty.common.util.SeqIdGetter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 
 /**
@@ -12,7 +14,11 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@ToString(callSuper = true)
 public class RpcResponse extends AbstractResponseMessage {
+    public RpcResponse() {
+        this.setSequenceId(SeqIdGetter.getId());
+    }
 
     /** 正常 返回值 */
     private Object returnValue;

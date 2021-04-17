@@ -3,6 +3,7 @@ package cn.like.netty.common.message.rpc;
 import cn.like.netty.common.message.Message;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Create By like On 2021-04-14 15:24
@@ -11,6 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
+@ToString(callSuper = true)
 public class RpcRequest extends Message {
 
     /** 调用的接口名字 */
