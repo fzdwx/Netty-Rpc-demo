@@ -1,51 +1,52 @@
-package cn.like.netty.rpc.server.init;
+package cn.like.netty.rpc.client.init;
 
 import cn.like.netty.common.message.dispatcher.MessageDispatcher;
 import cn.like.netty.common.protocol.MessageCodecSharable;
-import cn.like.netty.rpc.server.handler.NettyServerHandler;
+import cn.like.netty.rpc.client.handler.NettyClientHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.TimeUnit;
-
 /**
- * Create By like On 2021-04-17 11:58
+ * Create By like On 2021-04-17 14:35
  *
- * @Description: netty 服务器端 handler 初始化
+ * @Description: netty 客户端 handler 初始化
  */
 @Component
-public class NettyServerHandlerInitializer extends ChannelInitializer<Channel> {
+public class NettyClientHandlerInitializer extends ChannelInitializer<Channel> {
 
     /**
      * 心跳超时时间
      */
-    private static final Integer READ_TIMEOUT_SECONDS = 3 * 60;
+    private static final Integer READ_TIMEOUT_SECONDS = 60;
 
     /** 安全的 like 消息编解码器 */
     @Autowired
     MessageCodecSharable messageCodecSharable;
     /** netty 服务端处理程序 */
     @Autowired
-    NettyServerHandler nettyServerHandler;
+    NettyClientHandler nettyClientHandler;
     @Autowired
     MessageDispatcher messageDispatcher;
 
     @Override
     protected void initChannel(Channel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline()
-                // 空闲检测
-                .addLast(new ReadTimeoutHandler(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS))
+                .addLast(new IdleStateHandler(READ_TIMEOUT_SECONDS, 0, 0))
+                .addLast(new ReadTimeoutHandler(3 * READ_TIMEOUT_SECONDS))
                 .addLast(new LoggingHandler(LogLevel.DEBUG))
                 .addLast(messageCodecSharable)
                 .addLast(new LengthFieldBasedFrameDecoder(1024, 18, 4, 0, 0))
-                .addLast(nettyServerHandler)
+                .addLast(nettyClientHandler)
                 .addLast(messageDispatcher);
+
+
     }
 }

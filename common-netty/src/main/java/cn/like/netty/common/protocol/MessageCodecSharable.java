@@ -1,11 +1,13 @@
 package cn.like.netty.common.protocol;
 
 import cn.like.netty.common.message.Message;
+import cn.like.netty.common.message.dispatcher.MessageContainer;
 import cn.like.netty.common.serializer.MessageSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.CorruptedFrameException;
 import io.netty.handler.codec.MessageToMessageCodec;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,12 +72,23 @@ public class MessageCodecSharable extends MessageToMessageCodec<ByteBuf, Message
         byte serializationType = in.readByte();
         byte messageType = in.readByte();
         int seqId = in.readInt();
-        int msgArrayLen = in.readInt();
 
-        byte[] msg = new byte[msgArrayLen];
-        in.readBytes(msg, 0, msgArrayLen);
+        in.markReaderIndex(); // 标记当前读取位置
+        if (in.readableBytes() <= 4) {  // 判断是否能够读取 length 长度
+            return;
+        }
+        int msgLen = in.readInt();
+        if (msgLen < 0) {
+            throw new CorruptedFrameException("negative length: " + msgLen);
+        }
+        if (in.readableBytes() < msgLen) {  // 如果 message 不够可读，则退回到原读取位置;
+            in.resetReaderIndex();
+            return;
+        }
+        byte[] msg = new byte[msgLen];
+        in.readBytes(msg, 0, msgLen);
 
-        out.add(messageSerializer.deserialization(Message.getMessageClass(messageType), msg));  // 反序列化
+        out.add(messageSerializer.deserialization(MessageContainer.getMessageClass(messageType), msg));  // 反序列化
     }
 
     public String getMagicNumber() {

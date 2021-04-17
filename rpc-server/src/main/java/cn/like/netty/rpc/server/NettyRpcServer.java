@@ -1,5 +1,6 @@
 package cn.like.netty.rpc.server;
 
+import cn.like.netty.rpc.server.config.NettyRpcServerConfig;
 import cn.like.netty.rpc.server.init.NettyServerHandlerInitializer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -10,7 +11,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +25,6 @@ import static org.slf4j.LoggerFactory.getLogger;
  * netty Rpc 服务端
  */
 @Component
-@ConfigurationProperties(prefix = "netty")
 public class NettyRpcServer {
 
     private final static Logger log = getLogger(NettyRpcServer.class);
@@ -37,7 +36,6 @@ public class NettyRpcServer {
      * worker 线程组，用于服务端接受客户端的数据读写
      */
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
-    private Integer serverPort;
     /**
      * Netty Server Channel
      */
@@ -45,6 +43,8 @@ public class NettyRpcServer {
 
     @Autowired
     private NettyServerHandlerInitializer nettyServerHandlerInitializer;
+    @Autowired
+    NettyRpcServerConfig nettyRpcServerConfig;
 
     /**
      * 启动 Netty Server
@@ -54,7 +54,7 @@ public class NettyRpcServer {
         ServerBootstrap bootstrap = new ServerBootstrap();
         bootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)  //  指定 Channel 为服务端 NioServerSocketChannel
-                .localAddress(new InetSocketAddress(serverPort))
+                .localAddress(new InetSocketAddress(nettyRpcServerConfig.getServerPort()))
                 .option(ChannelOption.SO_BACKLOG, 1024) //  服务端 accept 队列的大小
                 .childOption(ChannelOption.SO_KEEPALIVE, true) // TCP Keepalive 机制，实现 TCP 层级的心跳保活功能
                 .childOption(ChannelOption.TCP_NODELAY, true) // 允许较小的数据包的发送，降低延迟
@@ -63,7 +63,7 @@ public class NettyRpcServer {
         ChannelFuture future = bootstrap.bind().sync();
         if (future.isSuccess()) {
             channel = future.channel();
-            log.info("#start#Netty Server 启动在 [{}] 端口", serverPort);
+            log.info("#start#Netty Server 启动在 [{}] 端口", nettyRpcServerConfig.getServerPort());
         }
     }
 
@@ -79,13 +79,5 @@ public class NettyRpcServer {
         // 优雅关闭两个 EventLoopGroup 对象
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
-    }
-
-    public Integer getServerPort() {
-        return serverPort;
-    }
-
-    public void setServerPort(Integer serverPort) {
-        this.serverPort = serverPort;
     }
 }

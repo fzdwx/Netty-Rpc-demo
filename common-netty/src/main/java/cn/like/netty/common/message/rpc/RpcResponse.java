@@ -4,6 +4,7 @@ import cn.like.netty.common.message.AbstractResponseMessage;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+
 /**
  * Create By like On 2021-04-14 15:23
  * <p>
@@ -11,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class RpcResponseMessage extends AbstractResponseMessage {
+public class RpcResponse extends AbstractResponseMessage {
 
     /** 正常 返回值 */
     private Object returnValue;
@@ -21,6 +22,6 @@ public class RpcResponseMessage extends AbstractResponseMessage {
 
     @Override
     public int getMessageType() {
-        return RpcResponseMessage;
+        return MessageTypeConstant.RpcResponse;
     }
 }

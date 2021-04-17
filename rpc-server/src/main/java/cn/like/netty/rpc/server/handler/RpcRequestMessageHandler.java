@@ -1,17 +1,19 @@
 package cn.like.netty.rpc.server.handler;
 
-import cn.like.netty.common.message.rpc.RpcRequestMessage;
-import cn.like.netty.common.message.rpc.RpcResponseMessage;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
+import cn.like.netty.common.message.Message;
+import cn.like.netty.common.message.dispatcher.MessageHandler;
+import cn.like.netty.common.message.rpc.RpcRequest;
+import cn.like.netty.common.message.rpc.RpcResponse;
+import io.netty.channel.Channel;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RpcRequestMessageHandler extends SimpleChannelInboundHandler<RpcRequestMessage> {
+public class RpcRequestMessageHandler implements MessageHandler<RpcRequest> {
+
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, RpcRequestMessage msg) {
-        final RpcResponseMessage resp = new RpcResponseMessage();
+    public void execute(Channel channel, RpcRequest message) {
+        final RpcResponse resp = new RpcResponse();
 
         // resp.setSequenceId(msg.getSequenceId());
         // try {  // 反射调用目标方法 invoke
@@ -25,6 +27,11 @@ public class RpcRequestMessageHandler extends SimpleChannelInboundHandler<RpcReq
         //     resp.setExMessage(new Exception("远程调用出错: " + e.getCause().getMessage()));
         // }
 
-        ctx.writeAndFlush(resp);
+        channel.writeAndFlush(resp);
+    }
+
+    @Override
+    public int getMessageType() {
+        return Message.MessageTypeConstant.RpcRequest;
     }
 }

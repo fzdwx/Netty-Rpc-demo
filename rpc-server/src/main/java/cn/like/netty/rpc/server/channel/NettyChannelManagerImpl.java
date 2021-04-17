@@ -2,9 +2,9 @@ package cn.like.netty.rpc.server.channel;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.like.netty.common.channel.NettyChannelManager;
+import cn.like.netty.common.message.Message;
 import cn.like.netty.common.util.RedisUtil;
 import io.netty.channel.Channel;
-import org.aopalliance.intercept.Invocation;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,9 +20,9 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @Description: redis 实现
  */
 @Component
-public class NettyChannelManagerRedis implements NettyChannelManager {
+public class NettyChannelManagerImpl implements NettyChannelManager {
 
-    private final static Logger log = getLogger(NettyChannelManagerRedis.class);
+    private final static Logger log = getLogger(NettyChannelManagerImpl.class);
 
     @Autowired
     RedisUtil redis;
@@ -59,7 +59,7 @@ public class NettyChannelManagerRedis implements NettyChannelManager {
     }
 
     @Override
-    public void send(String user, Invocation invocation) {
+    public void send(String user, Message message) {
         Channel ch = (Channel) redis.hget(REDIS_HASH_KEY_USER_CHANNELS, user);
         if (ObjectUtil.isNull(ch)) {
             log.error("#send#连接不存在#user [{}] ", user);
@@ -70,11 +70,11 @@ public class NettyChannelManagerRedis implements NettyChannelManager {
             return;
         }
         // 发送消息
-        ch.writeAndFlush(invocation);
+        ch.writeAndFlush(message);
     }
 
     @Override
-    public void sendAll(Invocation invocation) {
+    public void sendAll(Message message) {
         redis.hmget(REDIS_HASH_KEY_CHANNELS).values().forEach(o -> {
             Channel ch = (Channel) o;
             if (!ch.isActive()) {
@@ -82,7 +82,7 @@ public class NettyChannelManagerRedis implements NettyChannelManager {
                 return;
             }
             // 发送消息
-            ch.writeAndFlush(invocation);
+            ch.writeAndFlush(message);
         });
     }
 

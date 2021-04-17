@@ -1,7 +1,7 @@
 package cn.like.netty.common.channel;
 
+import cn.like.netty.common.message.Message;
 import io.netty.channel.Channel;
-import org.aopalliance.intercept.Invocation;
 
 /**
  * Create By like On 2021-04-17 12:16
@@ -36,17 +36,17 @@ public interface NettyChannelManager {
     /**
      * 向指定用户发送消息
      *
-     * @param user       用户
-     * @param invocation 消息体
+     * @param user    用户
+     * @param message 消息体
      */
-    void send(String user, Invocation invocation);
+    void send(String user, Message message);
 
     /**
      * 向所有用户发送消息
      *
-     * @param invocation 消息体
+     * @param message 消息体
      */
-    void sendAll(Invocation invocation);
+    void sendAll(Message message);
 
     /**
      * 获取属性

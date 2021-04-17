@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class RpcRequestMessage extends Message {
+public class RpcRequest extends Message {
 
     /** 调用的接口名字 */
     private String interfaceName;
@@ -24,7 +24,7 @@ public class RpcRequestMessage extends Message {
     /** 方法参数值 */
     private Object[] parameterValue;
 
-    public RpcRequestMessage(int sequenceId, String interfaceName, String methodName, String returnType, String[] parameterTypes, Object[] parameterValue) {
+    public RpcRequest(int sequenceId, String interfaceName, String methodName, String returnType, String[] parameterTypes, Object[] parameterValue) {
         this.setSequenceId(sequenceId);
         this.interfaceName = interfaceName;
         this.methodName = methodName;
@@ -35,6 +35,6 @@ public class RpcRequestMessage extends Message {
 
     @Override
     public int getMessageType() {
-        return RpcRequestMessage;
+        return MessageTypeConstant.RpcRequest;
     }
 }

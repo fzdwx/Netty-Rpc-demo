@@ -20,6 +20,6 @@ public class ServerMessage extends Message {
 
     @Override
     public int getMessageType() {
-        return ServerMessage;
+        return MessageTypeConstant.ServerMessage;
     }
 }
