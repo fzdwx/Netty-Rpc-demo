@@ -21,7 +21,7 @@ public class HeartbeatRequestHandler implements MessageHandler<HeartbeatRequest>
 
     @Override
     public void execute(Channel channel, HeartbeatRequest message) {
-        log.info("[execute][收到连接({}) 的心跳请求]", channel.id());
+        log.info("[execute][收到连接({}) 的心跳请求][message: {}]", channel.id(), message);
         // 响应心跳
         HeartbeatResponse response = new HeartbeatResponse("pong");
         channel.writeAndFlush(response);

@@ -7,6 +7,8 @@ import cn.like.netty.common.message.auth.AuthRequest;
 import cn.like.netty.common.message.auth.AuthResponse;
 import cn.like.netty.common.message.dispatcher.MessageHandler;
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +18,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthRequestHandler implements MessageHandler<AuthRequest> {
 
+    private final static Logger log = LoggerFactory.getLogger(AuthRequestHandler.class);
+
     @Autowired
     private NettyChannelManager ncm;
 
     @Override
     public void execute(Channel channel, AuthRequest message) {
+        log.info("[execute][收到连接({}) 的认证请求][message : {}]", channel.id(), message);
         if (StrUtil.isBlank(message.getAccessToken())) {
             channel.writeAndFlush(AuthResponse.error("accessToken 未传入"));
             return;

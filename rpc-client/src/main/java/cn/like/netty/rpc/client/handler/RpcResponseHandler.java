@@ -19,10 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * rpc 响应消息处理
  */
 @Component
-public class RpcResponseMessageHandler implements MessageHandler<RpcResponse> {
+public class RpcResponseHandler implements MessageHandler<RpcResponse> {
     /** 序号：接收结果的promise */
     public static final Map<Integer, Promise<Object>> RPC_PROMISES = new ConcurrentHashMap<>();
-    private final static Logger log = LoggerFactory.getLogger(RpcResponseMessageHandler.class);
+    private final static Logger log = LoggerFactory.getLogger(RpcResponseHandler.class);
 
     @Override
     public void execute(Channel channel, RpcResponse message) {

@@ -122,4 +122,13 @@ public class NettyClient {
         System.out.println(message);
         channel.writeAndFlush(message);
     }
+
+    /**
+     * get channel
+     *
+     * @return {@link Channel}
+     */
+    public Channel getChannel() {
+        return channel;
+    }
 }
