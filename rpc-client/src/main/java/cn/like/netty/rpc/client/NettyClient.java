@@ -119,7 +119,6 @@ public class NettyClient {
             return;
         }
         // 发送消息
-        System.out.println(message);
         channel.writeAndFlush(message);
     }
 

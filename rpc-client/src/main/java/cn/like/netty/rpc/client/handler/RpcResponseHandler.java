@@ -26,7 +26,7 @@ public class RpcResponseHandler implements MessageHandler<RpcResponse> {
 
     @Override
     public void execute(Channel channel, RpcResponse message) {
-        log.info("#channelRead0(..):rpc 调用{} ", message.getReturnValue());
+        log.info("[execute]:rpc 调用{} ", message);
 
         // 返回 promise
         Promise<Object> promise = RPC_PROMISES.remove(message.getSequenceId());

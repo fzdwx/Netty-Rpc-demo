@@ -3,6 +3,7 @@ package cn.like.netty.common.message;
 
 import cn.like.netty.common.message.auth.AuthRequest;
 import cn.like.netty.common.message.auth.AuthResponse;
+import cn.like.netty.common.message.chat.ChatMessage;
 import cn.like.netty.common.message.heartbeat.HeartbeatRequest;
 import cn.like.netty.common.message.heartbeat.HeartbeatResponse;
 import cn.like.netty.common.message.rpc.RpcRequest;
@@ -29,6 +30,8 @@ public abstract class Message implements Serializable {
         messageClasses.put(MessageTypeConstant.AuthResponse, AuthResponse.class);
 
         messageClasses.put(MessageTypeConstant.ServerMessage, ServerMessage.class);
+
+        messageClasses.put(MessageTypeConstant.ChatMessage, ChatMessage.class);
     }
 
     private int sequenceId;
@@ -52,6 +55,8 @@ public abstract class Message implements Serializable {
 
         public static final int AuthRequest = 1;
         public static final int AuthResponse = 2;
+
+        public static final int ChatMessage = 3;
 
     }
 }
