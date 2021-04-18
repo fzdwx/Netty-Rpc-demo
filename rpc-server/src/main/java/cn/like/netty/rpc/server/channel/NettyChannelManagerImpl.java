@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 
 import static cn.like.netty.common.channel.NettyChannelConstant.CHANNEL_ATTR_KEY_USER;
+import static cn.like.netty.common.channel.NettyChannelConstant.userChannels;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Component
@@ -31,10 +32,12 @@ public class NettyChannelManagerImpl implements NettyChannelManager {
             log.error("[addUser][连接({}) 不存在]", channel.id());
             return;
         }
-        // 设置属性
-        channel.attr(CHANNEL_ATTR_KEY_USER).set(user);
         // 添加到 userChannels
-        NettyChannelConstant.userChannels.put(user, channel);
+        if (!userChannels.containsValue(channel)) {
+            // 设置属性
+            channel.attr(CHANNEL_ATTR_KEY_USER).set(user);
+            NettyChannelConstant.userChannels.put(user, channel);
+        }
     }
 
     /**
@@ -47,10 +50,12 @@ public class NettyChannelManagerImpl implements NettyChannelManager {
         // 移除 channels
         NettyChannelConstant.channels.remove(channel.id());
         // 移除 userChannels
+        String name = "";
         if (channel.hasAttr(CHANNEL_ATTR_KEY_USER)) {
-            NettyChannelConstant.userChannels.remove(channel.attr(CHANNEL_ATTR_KEY_USER).get());
+            channel.attr(CHANNEL_ATTR_KEY_USER).get();
+            NettyChannelConstant.userChannels.remove(name);
         }
-        log.info("[remove][一个连接({})离开]", channel.id());
+        log.info("[remove][一个连接({})离开][name {}]", channel.id(), name);
     }
 
     /**

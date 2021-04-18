@@ -18,7 +18,7 @@ public class ChatResponseHandler implements MessageHandler<ChatMessage> {
 
     @Override
     public void execute(Channel channel, ChatMessage message) {
-        log.info("[execute][收到chat消息 {} ] ", message);
+        log.info("[execute][收到 来自 【{}】 chat消息 【{}】 ] ", message.getFrom(), message.getMessage());
     }
 
     @Override
