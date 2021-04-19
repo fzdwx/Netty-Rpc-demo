@@ -1,4 +1,4 @@
-package cn.like.netty.rpc.server.servoce;
+package cn.like.netty.rpc.server.service;
 
 import cn.like.netty.common.service.HelloService;
 import org.springframework.stereotype.Service;
