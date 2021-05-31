@@ -16,7 +16,7 @@ netty rpc 的一个小demo
         └───netty
             └───common
                 ├───channel         --- channel管理相关的接口(server端使用)
-                ├───message         --- client和server相互传递的消息
+                ├───message         --- client和server相互传递的消息(请求以及响应)
                 │   ├───auth            ---  用户注册
                 │   ├───chat            ---  用户聊天
                 │   ├───dispatcher      ---  消息分发
